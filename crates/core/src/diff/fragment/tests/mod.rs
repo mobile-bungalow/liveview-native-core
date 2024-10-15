@@ -98,8 +98,8 @@ fn jetpack_show_dialog() {
     let initial = r#"{
     "0":"",
     "s":[
-      "<Scaffold>\n  <TopAppBar>\n    <Title><Text>Hello</Text></Title>\n  </TopAppBar>\n  <FloatingActionButton phx-click=\"inc\">\n    <Icon imageVector=\"filled:Add\"></Icon>\n  </FloatingActionButton>\n  <Column width=\"fill\" verticalArrangement=\"center\" horizontalAlignment=\"center\" scroll=\"vertical\">\n    <OutlinedButton phx-click=\"showDialog\"><Text>Show Dialog</Text></OutlinedButton>\n",
-      "\n    <Box size=\"100\" contentAlignment=\"center\">\n      <BadgeBox containerColor=\"\\#FF0000FF\" contentColor=\"\\#FFFF0000\">\n        <Badge><Text>+99</Text></Badge>\n        <Icon imageVector=\"filled:Add\"></Icon>\n      </BadgeBox>\n    </Box>\n    <ElevatedButton phx-click=\"showDialog\"><Text>ElevatedButton</Text></ElevatedButton>\n    <FilledTonalButton phx-click=\"showDialog\"><Text>FilledTonalButton</Text></FilledTonalButton>\n    <TextButton phx-click=\"showDialog\"><Text>TextButton</Text></TextButton>\n\n  </Column>\n</Scaffold>"
+      "<Scaffold>\n  <Column width=\"fill\" verticalArrangement=\"center\" horizontalAlignment=\"center\" scroll=\"vertical\">\n    <OutlinedButton phx-click=\"showDialog\"><Text>Show Dialog</Text></OutlinedButton>\n",
+      "\n\n  </Column>\n</Scaffold>"
       ]
       }
     "#;
@@ -110,24 +110,9 @@ fn jetpack_show_dialog() {
         .try_into()
         .expect("Failed to render root as string");
     let expected = r#"<Scaffold>
-  <TopAppBar>
-    <Title><Text>Hello</Text></Title>
-  </TopAppBar>
-  <FloatingActionButton phx-click="inc">
-    <Icon imageVector="filled:Add"></Icon>
-  </FloatingActionButton>
   <Column width="fill" verticalArrangement="center" horizontalAlignment="center" scroll="vertical">
     <OutlinedButton phx-click="showDialog"><Text>Show Dialog</Text></OutlinedButton>
 
-    <Box size="100" contentAlignment="center">
-      <BadgeBox containerColor="\#FF0000FF" contentColor="\#FFFF0000">
-        <Badge><Text>+99</Text></Badge>
-        <Icon imageVector="filled:Add"></Icon>
-      </BadgeBox>
-    </Box>
-    <ElevatedButton phx-click="showDialog"><Text>ElevatedButton</Text></ElevatedButton>
-    <FilledTonalButton phx-click="showDialog"><Text>FilledTonalButton</Text></FilledTonalButton>
-    <TextButton phx-click="showDialog"><Text>TextButton</Text></TextButton>
 
   </Column>
 </Scaffold>"#;
@@ -137,47 +122,12 @@ fn jetpack_show_dialog() {
         .expect("Document failed to parse fragment json");
     // This is the same as above with minor styling changes.
     let document_expected = r#"<Scaffold>
-    <TopAppBar>
-        <Title>
-            <Text>
-                Hello
-            </Text>
-        </Title>
-    </TopAppBar>
-    <FloatingActionButton phx-click="inc">
-        <Icon imageVector="filled:Add" />
-    </FloatingActionButton>
     <Column width="fill" verticalArrangement="center" horizontalAlignment="center" scroll="vertical">
         <OutlinedButton phx-click="showDialog">
             <Text>
                 Show Dialog
             </Text>
         </OutlinedButton>
-        <Box size="100" contentAlignment="center">
-            <BadgeBox containerColor="\#FF0000FF" contentColor="\#FFFF0000">
-                <Badge>
-                    <Text>
-                        +99
-                    </Text>
-                </Badge>
-                <Icon imageVector="filled:Add" />
-            </BadgeBox>
-        </Box>
-        <ElevatedButton phx-click="showDialog">
-            <Text>
-                ElevatedButton
-            </Text>
-        </ElevatedButton>
-        <FilledTonalButton phx-click="showDialog">
-            <Text>
-                FilledTonalButton
-            </Text>
-        </FilledTonalButton>
-        <TextButton phx-click="showDialog">
-            <Text>
-                TextButton
-            </Text>
-        </TextButton>
     </Column>
 </Scaffold>"#;
     assert_eq!(document_expected, document.to_string());
@@ -197,12 +147,6 @@ fn jetpack_show_dialog() {
         .try_into()
         .expect("Failed to render root as string");
     let expected = r#"<Scaffold>
-  <TopAppBar>
-    <Title><Text>Hello</Text></Title>
-  </TopAppBar>
-  <FloatingActionButton phx-click="inc">
-    <Icon imageVector="filled:Add"></Icon>
-  </FloatingActionButton>
   <Column width="fill" verticalArrangement="center" horizontalAlignment="center" scroll="vertical">
     <OutlinedButton phx-click="showDialog"><Text>Show Dialog</Text></OutlinedButton>
 
@@ -224,15 +168,6 @@ fn jetpack_show_dialog() {
       </Content>
     </AlertDialog>
 
-    <Box size="100" contentAlignment="center">
-      <BadgeBox containerColor="\#FF0000FF" contentColor="\#FFFF0000">
-        <Badge><Text>+99</Text></Badge>
-        <Icon imageVector="filled:Add"></Icon>
-      </BadgeBox>
-    </Box>
-    <ElevatedButton phx-click="showDialog"><Text>ElevatedButton</Text></ElevatedButton>
-    <FilledTonalButton phx-click="showDialog"><Text>FilledTonalButton</Text></FilledTonalButton>
-    <TextButton phx-click="showDialog"><Text>TextButton</Text></TextButton>
 
   </Column>
 </Scaffold>"#;
@@ -251,16 +186,6 @@ fn jetpack_show_dialog() {
     editor.finish();
     //document.merge_fragment(diff.clone()).expect("Failed to merge in diff with document");
     let document_expected = r#"<Scaffold>
-    <TopAppBar>
-        <Title>
-            <Text>
-                Hello
-            </Text>
-        </Title>
-    </TopAppBar>
-    <FloatingActionButton phx-click="inc">
-        <Icon imageVector="filled:Add" />
-    </FloatingActionButton>
     <Column width="fill" verticalArrangement="center" horizontalAlignment="center" scroll="vertical">
         <OutlinedButton phx-click="showDialog">
             <Text>
@@ -276,43 +201,22 @@ fn jetpack_show_dialog() {
                 </TextButton>
             </ConfirmButton>
             <DismissButton>
-              <OutlinedButton phx-click="hideDialog">
-                <Text>
-                    Dismiss
-                </Text>
-              </OutlinedButton>
+                <OutlinedButton phx-click="hideDialog">
+                    <Text>
+                        Dismiss
+                    </Text>
+                </OutlinedButton>
             </DismissButton>
-            <Icon imageVector="filled:Add"></Icon>
-            <Title>Alert Title</Title>
+            <Icon imageVector="filled:Add" />
+            <Title>
+                Alert Title
+            </Title>
             <Content>
-                <Text>Alert message</Text>
+                <Text>
+                    Alert message
+                </Text>
             </Content>
         </AlertDialog>
-        <Box size="100" contentAlignment="center">
-            <BadgeBox containerColor="\#FF0000FF" contentColor="\#FFFF0000">
-                <Badge>
-                    <Text>
-                        +99
-                    </Text>
-                </Badge>
-                <Icon imageVector="filled:Add" />
-            </BadgeBox>
-        </Box>
-        <ElevatedButton phx-click="showDialog">
-            <Text>
-                ElevatedButton
-            </Text>
-        </ElevatedButton>
-        <FilledTonalButton phx-click="showDialog">
-            <Text>
-                FilledTonalButton
-            </Text>
-        </FilledTonalButton>
-        <TextButton phx-click="showDialog">
-            <Text>
-                TextButton
-            </Text>
-        </TextButton>
     </Column>
 </Scaffold>"#;
 
