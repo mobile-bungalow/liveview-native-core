@@ -9,8 +9,7 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
-  # Change to stable when features stabilize
-  CARGO_MAKE_TOOLCHAIN: nightly
+  CARGO_MAKE_TOOLCHAIN: stable
   CARGO_MAKE_CI: true
   ANDROID_API: 34
   ANDROID_NDK_VERSION: 26.3.11579264
@@ -364,14 +363,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        rust-target: ["aarch64-apple-ios-sim"]
-        apple-sim: ["iPhone 16"]
-        build-std: [""]
         include:
+          - rust-target: "aarch64-apple-ios-sim"
+            apple-sim: "iPhone 16"
+            toolchain: stable
+            build-std: ""
           - rust-target: "aarch64-apple-tvos-sim"
+            toolchain: nightly
             apple-sim: "Apple TV 4K (3rd generation)"
             build-std: "-Zbuild-std"
           - rust-target: "aarch64-apple-watchos-sim"
+            toolchain: nightly
             apple-sim: "Apple Watch Ultra 2 (49mm)"
             build-std: "-Zbuild-std"
     steps:
@@ -383,9 +385,9 @@ jobs:
 
       - uses: dtolnay/rust-toolchain@master
         with:
-          toolchain: ${{ env.CARGO_MAKE_TOOLCHAIN }}
+          toolchain: ${{ matrix.toolchain }}
           components: rust-src
-          targets: aarch64-apple-ios-sim
+          targets: ${{ matrix.rust-target }}
 
       - name: Cargo Cache
         uses: actions/cache@v4
