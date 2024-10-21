@@ -63,10 +63,10 @@ async fn android_show_dialog_playback() -> Result<(), AnyPanic> {
     let user_event = Event::from_string("event".to_owned());
     let payload = json_payload!({"type": "click", "event": "showDialog", "value": {}});
 
-    //playback.start_logging_patch_events();
+    playback.start_logging_patch_events();
     playback.send_message(user_event, payload).await?;
     playback.validate_document()?;
-    //playback.stop_logging_patch_events();
+    playback.stop_logging_patch_events();
 
     // Click close dialog
     let user_event = Event::from_string("event".to_owned());

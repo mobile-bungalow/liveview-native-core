@@ -7,9 +7,19 @@
         {
             "type": "lldb",
             "request": "launch",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                ],
+                "filter": {
+                    "name": "liveview_native_core"
+                }
+            },
+            "sourceLanguages": ["rust"],
             "name": "Debug",
-            "program": "${workspaceFolder}/<executable file>",
-            "args": [],
+            "args": ["--nocapture","android_show_dialog"],
             "cwd": "${workspaceFolder}"
         }
     ]

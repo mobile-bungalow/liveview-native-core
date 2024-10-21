@@ -241,7 +241,7 @@ fn jetpack_show_dialog() {
     let new_document = Document::parse(out).expect("Failed to parse rendered dom");
     let patches = crate::diff::diff(&document, &new_document);
     if patches.is_empty() {
-        return;
+        panic!("patches should not have been null")
     }
 
     let mut editor = document.edit();
@@ -251,6 +251,7 @@ fn jetpack_show_dialog() {
     }
     editor.finish();
     //document.merge_fragment(diff.clone()).expect("Failed to merge in diff with document");
+
     let document_expected = r#"<Scaffold>
     <TopAppBar>
         <Title>
