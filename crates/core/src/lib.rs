@@ -1,5 +1,3 @@
-#![feature(sync_unsafe_cell)]
-
 pub mod diff;
 pub mod dom;
 pub mod parser;

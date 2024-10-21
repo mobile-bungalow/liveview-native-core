@@ -1,4 +1,4 @@
-use std::{cell::SyncUnsafeCell, fmt, sync::Arc};
+use std::{cell::UnsafeCell, fmt, sync::Arc};
 
 pub use super::{
     attribute::Attribute,
@@ -10,13 +10,18 @@ use crate::{diff::fragment::RenderError, parser::ParseError};
 
 #[derive(Clone, uniffi::Object)]
 pub struct Document {
-    inner: Arc<SyncUnsafeCell<super::Document>>,
+    inner: Arc<UnsafeCell<super::Document>>,
 }
+
+// If the document is ever used in a multithreaded context then
+// we will need to wrap it in a mutex.
+unsafe impl Sync for Document {}
+unsafe impl Send for Document {}
 
 impl From<super::Document> for Document {
     fn from(doc: super::Document) -> Self {
         Self {
-            inner: Arc::new(SyncUnsafeCell::new(doc)),
+            inner: Arc::new(UnsafeCell::new(doc)),
         }
     }
 }
@@ -26,20 +31,20 @@ impl Document {
     #[uniffi::constructor]
     pub fn parse(input: String) -> Result<Arc<Self>, ParseError> {
         Ok(Arc::new(Self {
-            inner: Arc::new(SyncUnsafeCell::new(super::Document::parse(input)?)),
+            inner: Arc::new(UnsafeCell::new(super::Document::parse(input)?)),
         }))
     }
 
     #[uniffi::constructor]
     pub fn empty() -> Arc<Self> {
         Arc::new(Self {
-            inner: Arc::new(SyncUnsafeCell::new(super::Document::empty())),
+            inner: Arc::new(UnsafeCell::new(super::Document::empty())),
         })
     }
 
     #[uniffi::constructor]
     pub fn parse_fragment_json(input: String) -> Result<Arc<Self>, RenderError> {
-        let inner = Arc::new(SyncUnsafeCell::new(super::Document::parse_fragment_json(
+        let inner = Arc::new(UnsafeCell::new(super::Document::parse_fragment_json(
             input,
         )?));
         Ok(Arc::new(Self { inner }))
