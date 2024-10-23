@@ -163,7 +163,8 @@ jobs:
       - name: Install Rust Nightly
         uses: dtolnay/rust-toolchain@master
         with:
-          toolchain: ${{ env.CARGO_MAKE_TOOLCHAIN }}
+          # nightly needed for t3 targets
+          toolchain: nightly
           components: rust-src
           targets: aarch64-apple-ios-sim
             aarch64-apple-ios
@@ -430,7 +431,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Rust Nightly
+      - name: Install Rust
         uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{ env.CARGO_MAKE_TOOLCHAIN }}
