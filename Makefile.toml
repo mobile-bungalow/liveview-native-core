@@ -138,7 +138,7 @@ category = "Build"
 description = "Compiles for all targets needed to produce a universal library for watchOS and tvOS"
 command = "rustup"
 args = [
-    "run", "nightly", # we need nightly for the nostd targets
+    "run", "nightly", #nightly needed for -Z build-std 
     "cargo", "build",
     "--profile", "${CARGO_PROFILE}",
     "@@remove-empty(CARGO_MAKE_CARGO_VERBOSE_FLAGS)",
