@@ -29,9 +29,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: dtolnay/rust-toolchain@master
+      - uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: ${{ env.CARGO_MAKE_TOOLCHAIN }}
           components: rustfmt
 
       - name: Cargo fmt
@@ -85,10 +84,8 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-
-      - uses: dtolnay/rust-toolchain@master
+      - uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: ${{ env.CARGO_MAKE_TOOLCHAIN }}
           components: clippy
 
       - name: Cargo fmt
@@ -425,9 +422,8 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install Rust
-        uses: dtolnay/rust-toolchain@master
+        uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: ${{ env.CARGO_MAKE_TOOLCHAIN }}
           target: x86_64-linux-android
 
       - name: Cargo Cache
