@@ -159,12 +159,15 @@ jobs:
     runs-on: macos-15
 
     steps:
+      - name: Set nightly env for t3 targets.
+        run: export CARGO_MAKE_TOOLCHAIN="nightly"
+
       - uses: actions/checkout@v4
       - name: Install Rust Nightly
         uses: dtolnay/rust-toolchain@master
         with:
-          # nightly needed for t3 targets
-          toolchain: nightly
+          # nightly needed for t3
+          toolchain: ${{ env.CARGO_MAKE_TOOLCHAIN }}
           components: rust-src
           targets: aarch64-apple-ios-sim
             aarch64-apple-ios
@@ -388,7 +391,7 @@ jobs:
         with:
           toolchain: ${{ matrix.toolchain }}
           components: rust-src
-          targets: ${{ matrix.rust-target }}
+          targets: aarch64-apple-ios-sim
 
       - name: Cargo Cache
         uses: actions/cache@v4
