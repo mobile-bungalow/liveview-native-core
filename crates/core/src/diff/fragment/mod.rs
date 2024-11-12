@@ -18,6 +18,8 @@ pub struct RootDiff {
 // This is the struct representation of the whole tree.
 #[derive(Debug, Clone, PartialEq, Deserialize, Serialize)]
 pub struct Root {
+    #[serde(rename = "newRender", skip_serializing_if = "Option::is_none")]
+    new_render: Option<bool>,
     #[serde(flatten)]
     fragment: Fragment,
     #[serde(rename = "c", default = "HashMap::new")]
@@ -26,6 +28,9 @@ pub struct Root {
 
 // These are used in the wasm build.
 impl Root {
+    pub fn set_new_render(&mut self, new: bool) {
+        self.new_render = Some(new);
+    }
     pub fn is_component_only_diff(&self) -> bool {
         !self.components.is_empty() && self.fragment.is_empty()
     }
@@ -55,6 +60,7 @@ impl TryFrom<RootDiff> for Root {
             components.insert(key, value.try_into()?);
         }
         Ok(Self {
+            new_render: None,
             fragment: value.fragment.try_into()?,
             components,
         })
@@ -433,26 +439,21 @@ pub enum Fragment {
 impl Fragment {
     pub fn is_new_fingerprint(&self) -> bool {
         match self {
-            Fragment::Regular { .. } => false,
-            Fragment::Comprehension { statics, .. } => statics.is_some(),
+            Fragment::Regular { statics, .. } | Fragment::Comprehension { statics, .. } => {
+                statics.is_some()
+            }
         }
     }
     pub fn is_empty(&self) -> bool {
         match self {
-            Fragment::Regular { .. } => false,
             Fragment::Comprehension {
                 dynamics,
-                statics,
-                reply,
-                templates,
-                stream,
-            } => {
-                dynamics.is_empty()
-                    && statics.is_none()
-                    && reply.is_none()
-                    && templates.is_none()
-                    && stream.is_none()
-            }
+                statics: None,
+                reply: None,
+                templates: None,
+                stream: None,
+            } => dynamics.is_empty(),
+            _ => false,
         }
     }
 }
@@ -593,13 +594,7 @@ impl FragmentMerge for Option<Statics> {
     type DiffItem = Option<Statics>;
 
     fn merge(self, diff: Self::DiffItem) -> Result<Self, MergeError> {
-        match (self, diff) {
-            (None, None) => Ok(None),
-            (None, Some(s)) => Ok(Some(s)),
-            (Some(s), None) => Ok(Some(s)),
-            // Do we merge the vec of statics?
-            (Some(_current), Some(new)) => Ok(Some(new)),
-        }
+        Ok(diff.or(self))
     }
 }
 
@@ -715,6 +710,7 @@ impl FragmentMerge for Root {
         let components = self.components.merge(diff.components)?;
 
         Ok(Self {
+            new_render: None,
             fragment,
             components,
         })
