@@ -1,4 +1,4 @@
-defmodule TestServerWeb.ThermostatLive do
+defmodule(TestServerWeb.ThermostatLive) do
   use Phoenix.LiveView
   use TestServerWeb, :live_view
   use TestServerNative, :live_view
@@ -29,36 +29,36 @@ defmodule TestServerWeb.ThermostatLive do
     <% end %>
     """
   end
-end
 
-defmodule TestServerWeb.ThermostatLive.SwiftUI do
-  use TestServerNative, [:render_component, format: :swiftui]
+  defmodule TestServerWeb.ThermostatLive.SwiftUI do
+    use TestServerNative, [:render_component, format: :swiftui]
 
-  def render(assigns, _interface) do
-    ~LVN"""
-    <VStack>
-      <Text>
-        Current temperature: <%= @temperature %>°F
-      </Text>
-      <Button phx-click="inc_temperature">+</Button>
-    </VStack>
-    """
-  end
-end
-
-defmodule TestServerWeb.ThermostatLive.Jetpack do
-  use TestServerNative, [:render_component, format: :jetpack]
-
-  def render(assigns, _) do
-    ~LVN"""
-    <Box size="fill" background="system-blue">
-    <Column>
+    def render(assigns, _interface) do
+      ~LVN"""
+      <VStack>
         <Text>
           Current temperature: <%= @temperature %>°F
         </Text>
         <Button phx-click="inc_temperature">+</Button>
-    </Column>
-    </Box>
-    """
+      </VStack>
+      """
+    end
+  end
+
+  defmodule TestServerWeb.ThermostatLive.Jetpack do
+    use TestServerNative, [:render_component, format: :jetpack]
+
+    def render(assigns, _) do
+      ~LVN"""
+      <Box size="fill" background="system-blue">
+      <Column>
+          <Text>
+            Current temperature: <%= @temperature %>°F
+          </Text>
+          <Button phx-click="inc_temperature">+</Button>
+      </Column>
+      </Box>
+      """
+    end
   end
 end

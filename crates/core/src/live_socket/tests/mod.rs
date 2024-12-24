@@ -111,6 +111,42 @@ async fn channels_drop_on_shutdown() {
 }
 
 #[tokio::test]
+async fn cross_session_redirect() {
+    let _ = env_logger::builder()
+        .parse_default_env()
+        .is_test(true)
+        .try_init();
+
+    let url = format!("http://{HOST}/redirect_cross");
+    let live_socket = LiveSocket::new(url.to_string(), "swiftui".into(), Default::default())
+        .await
+        .expect("Failed to get liveview socket");
+
+    let live_channel = live_socket
+        .join_liveview_channel(None, None)
+        .await
+        .expect("Failed to join channel");
+
+    let join_doc = live_channel
+        .join_document()
+        .expect("Failed to render join payload");
+
+    let expected = r#"
+<Group id="flash-group" />
+<VStack>
+    <Text>
+        Redirected to :other_session!
+    </Text>
+</VStack>"#;
+    assert_doc_eq!(expected, join_doc.to_string());
+
+    let _live_channel = live_socket
+        .join_livereload_channel()
+        .await
+        .expect("Failed to join channel");
+}
+
+#[tokio::test]
 async fn join_redirect() {
     let _ = env_logger::builder()
         .parse_default_env()
@@ -135,7 +171,7 @@ async fn join_redirect() {
 <Group id="flash-group" />
 <VStack>
     <Text>
-        Redirected!
+        Redirected to :default!
     </Text>
 </VStack>"#;
     assert_doc_eq!(expected, join_doc.to_string());

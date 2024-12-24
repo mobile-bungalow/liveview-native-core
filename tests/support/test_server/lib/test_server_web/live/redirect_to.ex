@@ -2,14 +2,18 @@ defmodule TestServerWeb.RedirectToLive do
   use TestServerWeb, :live_view
   use TestServerNative, :live_view
 
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
+    socket =
+      socket
+      |> assign(:action, inspect(socket.assigns.live_action || :default))
+
     {:ok, socket}
   end
 
   def render(assigns) do
     ~H"""
     <p>
-      Redirected!
+      Redirect to <%= assigns.action%>
     </p>
     """
   end
@@ -22,7 +26,7 @@ defmodule TestServerWeb.RedirectToLive.Jetpack do
     ~LVN"""
     <Box size="fill" background="system-blue">
       <Text align="Center">
-        Redirected!
+        Redirected to <%= assigns.action %>!
       </Text>
     </Box>
     """
@@ -36,7 +40,7 @@ defmodule TestServerWeb.RedirectToLive.SwiftUI do
     ~LVN"""
     <VStack>
       <Text>
-        Redirected!
+        Redirected to <%= assigns.action %>!
       </Text>
     </VStack>
     """

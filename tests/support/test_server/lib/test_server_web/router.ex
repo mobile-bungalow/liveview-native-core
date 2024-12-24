@@ -20,27 +20,25 @@ defmodule TestServerWeb.Router do
     plug(:accepts, ["json"])
   end
 
-  scope "/redirect", TestServerWeb do
-    pipe_through([:browser, :redirect])
-
-    live_session :redirect,
-      on_mount: [{TestServerWeb.Redirect, :redirect}] do
-      live("/redirect/finale", UserRegistrationLive, :new)
-    end
-  end
-
   scope "/", TestServerWeb do
     pipe_through(:browser)
 
-    get("/", PageController, :home)
+    live_session :other_session do
+      live("/cross_session", RedirectToLive, :other_session)
+    end
 
+    get("/", PageController, :home)
+    live("/users/log_in", UserRegistrationLive)
+    live("/thermostat", ThermostatLive)
     live("/redirect_from", RedirectLive)
     live("/redirect_to", RedirectToLive)
-    live("/thermostat", ThermostatLive)
+    live("/redirect_cross", RedirectLive, :cross_session)
     live("/hello", HelloLive)
     live("/nav/:dynamic", NavLive)
     live("/upload", SimpleLiveUpload)
     live("/stream", SimpleLiveStream)
+    live("/simple_form", SimpleForm)
+    live("/simple_form_get", SimpleFormGet)
   end
 
   # Other scopes may use custom stacks.
